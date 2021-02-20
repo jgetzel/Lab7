@@ -85,6 +85,26 @@
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchAll() {
         // TODO
+        let recordForm = document.getElementById('recordForm');
+        recordForm.style.display = "none";
+
+        let output = document.getElementById('output');
+        let endpoint = document.getElementById('endpoint').value;
+        let response = fetch(endpoint, {
+          method: 'GET'
+        });
+        response
+          .then(resp => {
+            if(!resp.ok){
+              throw new Error(resp.status + " " + resp.statusText);
+              return;
+            }
+            else{
+              return resp.json();
+            }
+          })
+          .then(data => output.textContent = JSON.stringify(data))
+          .catch(error => output.textContent = error);
       }
 
       // This function should fetch one entry from the given endpoint.
@@ -93,22 +113,110 @@
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchOne() {
         // TODO
+        let recordForm = document.getElementById('recordForm');
+        recordForm.style.display = "none";
+
+        let output = document.getElementById('output');
+        let endpoint = document.getElementById('endpoint').value;
+        let index = window.prompt("Enter record id");
+        endpoint = endpoint + '/' + index;
+        let response = fetch(endpoint, {
+          method: "GET"
+        });
+        response
+          .then(resp => {
+            if(!resp.ok){
+              throw new Error(resp.status + " " + resp.statusText);
+              return;
+            }
+            else{
+              return resp.json();
+            }
+          })
+          .then(data => output.textContent = JSON.stringify(data))
+          .catch(error => output.textContent = error);
       }
 
       // This function should use fetch to create one entry in the given endpoint.
       // From the 4 CRUD actions, this is the CREATE action, and uses the POST http method.
       // The main difference from updateRecord() will be the URL you send data to; check
       // the writeup to view the URL pattern for create and update
-      function createRecord() {
-        // TODO
+      function createRecord(arg) {
+        let recordForm = document.getElementById('recordForm');
+
+        if(arg == "show"){ 
+          recordForm.style.display = "block";
+          return;
+        }
+
+        let endpoint = document.getElementById('endpoint').value;
+        let output = document.getElementById('output');
+        let response = fetch(endpoint, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title: `${document.getElementById('title').value}`,
+            author: `${document.getElementById('author').value}`
+          })
+        });
+        response
+          .then(resp => {
+            if(!resp.ok){
+              throw new Error(resp.status + " " + resp.statusText);
+              return;
+            }
+            else return resp.json();
+          })
+          .then(data => output.textContent = JSON.stringify(data))
+          .catch(error => output.textContent = error);
+
+        recordForm.style.display = "none";
       }
 
       // This function should use fetch to update one existing entry in the given endpoint.
       // From the 4 CRUD actions, this is the UPDATE action, and uses the PUT http method.
       // The main difference from createRecord() will be the URL you send data to; check
       // the writeup to view the URL pattern for create and update
-      function updateRecord() {
+      function updateRecord(arg) {
         // TODO
+        let recordForm = document.getElementById('recordForm');
+        let recordIDcontainer = document.getElementById("recordIDcontainer");
+        if(arg == "show"){ 
+          recordForm.style.display = "block";
+          recordIDcontainer.style.display = "block";
+          return;
+        }
+
+        let endpoint = document.getElementById('endpoint').value;
+        endpoint = endpoint + "/" + document.getElementById("recordID").value;
+
+        let output = document.getElementById('output');
+        let response = fetch(endpoint, {
+          method: "PUT",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title: `${document.getElementById('title').value}`,
+            author: `${document.getElementById('author').value}`
+          })
+        });
+        response
+          .then(resp => {
+            if(!resp.ok){
+              throw new Error(resp.status + " " + resp.statusText);
+              return;
+            }
+            else return resp.json();
+          })
+          .then(data => output.textContent = JSON.stringify(data))
+          .catch(error => output.textContent = error);
+
+        recordForm.style.display = "none";
+        recordIDcontainer.style.display = "none";
+
       }
 
       // This function should use fetch to delete one existing entry in the given endpoint.
@@ -118,6 +226,28 @@
       // delete all, only delete one.
       function deleteRecord() {
         // TODO
+        let recordForm = document.getElementById('recordForm');
+        recordForm.style.display = "none";
+
+        let output = document.getElementById('output');
+        let endpoint = document.getElementById('endpoint').value;
+        let index = window.prompt("Enter record id");
+        endpoint = endpoint + '/' + index;
+        let response = fetch(endpoint, {
+          method: "DELETE"
+        });
+        response
+          .then(resp => {
+            if(!resp.ok){
+              throw new Error(resp.status + " " + resp.statusText);
+              return;
+            }
+            else{
+              return resp.json();
+            }
+          })
+          .then(data => output.textContent = JSON.stringify(data))
+          .catch(error => output.textContent = error);
       }
 
       window.addEventListener('DOMContentLoaded', () => {
